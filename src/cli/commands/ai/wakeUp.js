@@ -31,37 +31,40 @@ const wakeUpAction = async () => {
 
     console.log(chalk.green(`Welcome back, ${user.name}!\n`));
 
-  const choice = await select({
-    message: "Select an Option",
-    options: [
-      {
-        value: "chat",
-        label: "Chat",
-        hint: "Simple chat with AI",
-      },
-      {
-        value: "tool",
-        label: "Tool Calling",
-        hint: "Chat with tools (Google Search, Code Execution)",
-      },
-      {
-        value: "agent",
-        label: "Agentic Mode",
-        hint: "Advanced AI agent (Coming soon)",
-      },
-    ],
-  });
+    const choice = await select({
+      message: "Select an Option",
+      options: [
+        {
+          value: "chat",
+          label: "Chat",
+          hint: "Simple chat with AI",
+        },
+        {
+          value: "tool",
+          label: "Tool Calling",
+          hint: "Chat with tools (Google Search, Code Execution)",
+        },
+        {
+          value: "agent",
+          label: "Agentic Mode",
+          hint: "Advanced AI agent (Coming soon)",
+        },
+      ],
+    });
 
-  switch (choice) {
-    case "chat":
-      await startChat("chat");
-      break;
-    case "tool":
-      await startToolChat();
-      break;
-    case "agent":
-      await startAgentChat();
-      break;
+    switch (choice) {
+      case "chat":
+        await startChat("chat");
+        break;
+      case "tool":
+        await startToolChat();
+        break;
+      case "agent":
+        await startAgentChat();
+        break;
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
