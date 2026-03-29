@@ -4,8 +4,7 @@
     {
       "src": "src/index.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**"] },
-      "buildCommand": "prisma generate"
+      "config": { "includeFiles": ["dist/**"] }
     }
   ],
   "routes": [
