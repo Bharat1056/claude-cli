@@ -3,6 +3,11 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { deviceAuthorization } from "better-auth/plugins";
 import prisma from "./db.js";
 
+const crossSiteCookieAttributes = {
+  sameSite: "none",
+  secure: true,
+};
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -17,11 +22,8 @@ export const auth = betterAuth({
     },
   },
   advanced: {
-    defaultCookieAttributes: {
-      sameSite: "none", // ← allows cross-site cookies
-      secure: true, // ← required when sameSite is "none"
-      partitioned: true, // ← CHIPS, helps with Safari/Chrome blocking
-    },
+    useSecureCookies: true,
+    defaultCookieAttributes: crossSiteCookieAttributes,
   },
   plugins: [
     deviceAuthorization({
