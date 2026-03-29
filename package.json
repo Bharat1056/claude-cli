@@ -7,9 +7,10 @@
     "claude": "./src/cli/main.js"
   },
   "scripts": {
-    "build": "prisma generate",
+    "build": "npx prisma generate",
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "postinstall": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -33,9 +34,7 @@
     "nodemon": "^3.1.14",
     "open": "^11.0.0",
     "yocto-spinner": "^1.1.0",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
+    "zod": "^4.3.6",
     "prisma": "^6.19.2"
   }
 }
