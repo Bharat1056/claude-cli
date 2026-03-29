@@ -25,6 +25,11 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get('/device', async (req, res) => {
+  const { user_code } = req.query
+  res.redirect(`${process.env.CORS_ORIGIN}/device?user_code=${user_code}`);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
