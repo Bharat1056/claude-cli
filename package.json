@@ -7,8 +7,9 @@
     "claude": "./src/cli/main.js"
   },
   "scripts": {
+    "build": "prisma generate",
     "dev": "nodemon src/index.js",
-    "start": "npx prisma generate && node src/index.js"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
