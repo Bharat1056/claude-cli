@@ -56,7 +56,7 @@ async function getUserFromToken() {
   return user;
 }
 
-function displayMessages(messages) {
+export function displayMessages(messages) {
   messages.forEach((msg) => {
     if (msg.role === "user") {
       const userBox = boxen(chalk.white(msg.content), {
@@ -84,11 +84,11 @@ function displayMessages(messages) {
   });
 }
 
-async function saveMessage(conversationId, role, content) {
+export async function saveMessage(conversationId, role, content) {
   return await chatService.addMessage(conversationId, role, content);
 }
 
-async function getAiResponse(conversationId) {
+export async function getAiResponse(conversationId) {
   const spinner = yoctoSpinner({
     text: "Claude is thinking...",
     color: "cyan",
@@ -117,12 +117,14 @@ async function getAiResponse(conversationId) {
     console.log("\n");
     return result.content;
   } catch (error) {
+    spinner.error("Failed to get AI response");
+    throw error;
   } finally {
     spinner.stop();
   }
 }
 
-async function updateConversationTitle(
+export async function updateConversationTitle(
   conversationId,
   userInput,
   messageCount,
