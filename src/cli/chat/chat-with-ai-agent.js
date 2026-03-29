@@ -5,7 +5,7 @@ import { text, isCancel, cancel, intro, outro, confirm } from "@clack/prompts";
 import { AIService } from "../ai/google-service.js";
 import { ChatService } from "../../service/chat.service.js";
 import { getStoredToken } from "../../lib/token.js";
-import prisma from "../../lib/db.js";
+import { fetchUserFromAPI } from "../../lib/api-client.js";
 import { generateApplication } from "../../config/agent.config.js";
 import { saveMessage } from "./chat-with-ai.js";
 
@@ -19,22 +19,14 @@ async function getUserFromToken() {
   }
 
   const spinner = yoctoSpinner({ text: "Authenticating..." }).start();
-  const user = await prisma.user.findFirst({
-    where: {
-      sessions: {
-        some: {
-          token: token?.access_token,
-        },
-      },
-    },
-  });
-  if (!user) {
+  try {
+    const user = await fetchUserFromAPI(token?.access_token, true);
+    spinner.success(`Welcome back, ${user.name}!`);
+    return user;
+  } catch (error) {
     spinner.error("User not found");
     throw new Error("User not found please login again.");
   }
-
-  spinner.success(`Welcome back, ${user.name}!`);
-  return user;
 }
 
 async function initConversation(userId, conversationId = null) {

@@ -3,6 +3,7 @@ import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 import dotenv from "dotenv";
 import { auth } from "./lib/auth.js";
+import userRoutes from "./routes/user.js";
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,9 @@ app.use(
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
+
+// User API routes
+app.use("/api/user", userRoutes);
 
 const PORT = process.env.PORT || 3000;
 

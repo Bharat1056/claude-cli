@@ -3,7 +3,7 @@ import { Command } from "commander";
 import yoctoSpinner from "yocto-spinner";
 import { select } from "@clack/prompts";
 import { getStoredToken } from "../../../lib/token.js";
-import prisma from "../../../lib/db.js";
+import { fetchUserFromAPI } from "../../../lib/api-client.js";
 import { startChat } from "../../chat/chat-with-ai.js";
 import { startToolChat } from "../../chat/chat-with-ai-tool.js";
 import { startAgentChat } from "../../chat/chat-with-ai-agent.js";
@@ -19,30 +19,17 @@ const wakeUpAction = async () => {
   const spinner = yoctoSpinner({ text: "Fetching user information" });
   spinner.start();
 
-  const user = await prisma.user.findFirst({
-    where: {
-      sessions: {
-        some: {
-          token: token?.access_token,
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-    },
-  });
+  try {
+    const user = await fetchUserFromAPI(token?.access_token, false);
 
-  spinner.stop();
+    spinner.stop();
 
-  if (!user) {
-    console.log(chalk.red("User not found"));
-    return;
-  }
+    if (!user) {
+      console.log(chalk.red("User not found"));
+      return;
+    }
 
-  console.log(chalk.green(`Welcome back, ${user.name}!\n`));
+    console.log(chalk.green(`Welcome back, ${user.name}!\n`));
 
   const choice = await select({
     message: "Select an Option",

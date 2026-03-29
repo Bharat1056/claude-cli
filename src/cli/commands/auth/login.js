@@ -11,7 +11,7 @@ import os from "os";
 import path from "path";
 import yoctoSpinner from "yocto-spinner";
 import * as z from "zod/v4";
-import prisma from "../../../lib/db.js";
+import { fetchUserFromAPI } from "../../../lib/api-client.js";
 import dotenv from "dotenv";
 import {
   clearStoredToken,
@@ -248,27 +248,18 @@ export async function whoamiAction(opts) {
     process.exit(1);
   }
 
-  const user = await prisma.user.findFirst({
-    where: {
-      sessions: {
-        some: {
-          token: token.access_token,
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-    },
-  });
+  try {
+    const user = await fetchUserFromAPI(token.access_token, false);
 
-  console.log(
-    chalk.bold.greenBright(
-      `\n👤 User: ${user.name} Email: ${user.email} ID: ${user.id}`,
-    ),
-  );
+    console.log(
+      chalk.bold.greenBright(
+        `\n👤 User: ${user.name} Email: ${user.email} ID: ${user.id}`,
+      ),
+    );
+  } catch (error) {
+    console.log(chalk.red(`Error fetching user: ${error.message}`));
+    process.exit(1);
+  }
 }
 
 export const login = new Command("login")
