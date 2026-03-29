@@ -12,6 +12,7 @@ app.use(
     origin: process.env.CORS_ORIGIN,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    exposedHeaders: ["set-cookie"],
   }),
 );
 
@@ -25,8 +26,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get('/device', async (req, res) => {
-  const { user_code } = req.query
+app.get("/device", async (req, res) => {
+  const { user_code } = req.query;
   res.redirect(`${process.env.CORS_ORIGIN}/device?user_code=${user_code}`);
 });
 

@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { deviceAuthorization } from 'better-auth/plugins'
+import { deviceAuthorization } from "better-auth/plugins";
 import prisma from "./db.js";
 
 export const auth = betterAuth({
@@ -16,10 +16,17 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
   },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "none", // ← allows cross-site cookies
+      secure: true, // ← required when sameSite is "none"
+      partitioned: true, // ← CHIPS, helps with Safari/Chrome blocking
+    },
+  },
   plugins: [
     deviceAuthorization({
-      expiresIn: '30m',
-      interval: '5s',
-    })
-  ]
+      expiresIn: "30m",
+      interval: "5s",
+    }),
+  ],
 });
