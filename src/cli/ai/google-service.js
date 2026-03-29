@@ -6,7 +6,7 @@ import chalk from "chalk";
 export class AIService {
   constructor() {
     if (!config.googleApiKey) {
-      throw new Error("GOOGLE_API_KEY us not set in env");
+      throw new Error("GOOGLE_GENERATIVE_AI_API_KEY us not set in env");
     }
 
     this.model = google(config.model, {
@@ -18,7 +18,7 @@ export class AIService {
     try {
       const streamConfig = {
         model: this.model,
-        message: message,
+        messages: message,
       };
 
       const result = streamText(streamConfig);
